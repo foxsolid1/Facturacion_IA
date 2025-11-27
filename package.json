@@ -1,0 +1,26 @@
+{
+  "name": "facturacion-sistema",
+  "version": "1.0.0",
+  "description": "Sistema profesional de gestión y visualización de facturas",
+  "main": "app.js",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "security-check": "node security-check.js",
+    "pre-push": "node security-check.js",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "facturas",
+    "invoices",
+    "google-sheets",
+    "dashboard",
+    "accounting"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TU_USUARIO/facturacion-sistema.git"
+  }
+}
