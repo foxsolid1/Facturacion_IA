@@ -205,10 +205,24 @@ function parseSheetData(json) {
     const rows = json.table.rows;
     const invoices = [];
 
-    // Saltar la primera fila (encabezados)
+    // Saltar la primera fila (encabezados) si es necesario, pero Google Sheets API con tq suele devolver solo datos si se configura bien.
+    // En este caso, parece que devuelve headers en cols y datos en rows.
+
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         if (!row.c) continue;
+
+        // Función auxiliar para limpiar precios
+        const parsePrice = (val) => {
+            if (typeof val === 'number') return val;
+            if (!val) return 0;
+            // Eliminar símbolos de moneda y comas, mantener punto decimal
+            // Si viene como "$1.059,50" (formato español/latino con punto para miles y coma para decimales?)
+            // O "$1,059.50" (formato US con coma para miles y punto para decimales)
+            // Google Sheets JSON suele devolver el valor numérico en 'v' si la celda es número.
+            // Si es string, intentamos limpiar.
+            return parseFloat(String(val).replace(/[^\d.-]/g, '')) || 0;
+        };
 
         const invoice = {
             fecha: getCellValue(row.c[0]),
@@ -222,9 +236,9 @@ function parseSheetData(json) {
             provincia: getCellValue(row.c[8]),
             telefono: getCellValue(row.c[9]),
             descripcion: getCellValue(row.c[10]),
-            importe: parseFloat(getCellValue(row.c[11])) || 0,
-            iva: parseFloat(getCellValue(row.c[12])) || 0,
-            total: parseFloat(getCellValue(row.c[13])) || 0,
+            importe: typeof row.c[11]?.v === 'number' ? row.c[11].v : parsePrice(getCellValue(row.c[11])),
+            iva: typeof row.c[12]?.v === 'number' ? row.c[12].v : parsePrice(getCellValue(row.c[12])),
+            total: typeof row.c[13]?.v === 'number' ? row.c[13].v : parsePrice(getCellValue(row.c[13])),
             moneda: getCellValue(row.c[14]) || 'MXN',
             notas: getCellValue(row.c[15]),
             url: getCellValue(row.c[16]),
@@ -238,6 +252,21 @@ function parseSheetData(json) {
 
 function getCellValue(cell) {
     if (!cell) return '';
+
+    // Manejar fechas de Google Sheets "Date(yyyy,m,d)"
+    if (typeof cell.v === 'string' && cell.v.startsWith('Date(')) {
+        const parts = cell.v.match(/Date\((\d+),(\d+),(\d+)\)/);
+        if (parts) {
+            const year = parseInt(parts[1]);
+            const month = parseInt(parts[2]); // Meses son 0-indexed en JS y en este formato
+            const day = parseInt(parts[3]);
+            const date = new Date(year, month, day);
+            return date.toISOString().split('T')[0]; // Retorna YYYY-MM-DD
+        }
+    }
+
+    // Si tiene valor formateado 'f', úsalo si 'v' no es útil, pero preferimos 'v' para datos crudos
+    // Excepto para fechas donde queremos un formato estándar
     return cell.v !== undefined ? cell.v : '';
 }
 
