@@ -187,154 +187,118 @@
                     <div class="stat-card">
                         <div class="stat-icon stat-icon-green">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <line x1="12" y1="1" x2="12" y2="23" stroke-width="2" />
-                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke-width="2" />
-                            </svg>
+                                <!-- Tabla de Facturas Recientes -->
+                                <div class="table-container">
+                                    <div class="table-header">
+                                        <h3>Facturas Recientes</h3>
+                                        <button id="viewAllBtn" class="btn-secondary">Ver todas</button>
+                                    </div>
+                                    <div class="table-wrapper">
+                                        <table class="invoices-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>N° Factura</th>
+                                                    <th>Emisor</th>
+                                                    <th>Categoría</th>
+                                                    <th>Importe</th>
+                                                    <th>IVA</th>
+                                                    <th>Total</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recentInvoicesTable">
+                                                <tr class="loading-row">
+                                                    <td colspan="8">
+                                                        <div class="loading-spinner"></div>
+                                                        <p>Cargando facturas...</p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                         </div>
-                        <div class="stat-content">
-                            <p class="stat-label">Importe Total</p>
-                            <p class="stat-value" id="totalAmount">€0.00</p>
+
+                        <!-- Vista Facturas -->
+                        <div id="invoicesView" class="content-view">
+                            <div class="page-header">
+                                <h2>Todas las Facturas</h2>
+                                <p class="page-subtitle">Gestión completa de facturas</p>
+                            </div>
+
+                            <div class="filters-bar">
+                                <select id="categoryFilter" class="filter-select">
+                                    <option value="">Todas las categorías</option>
+                                </select>
+                                <select id="monthFilter" class="filter-select">
+                                    <option value="">Todos los meses</option>
+                                </select>
+                                <input type="date" id="dateFromFilter" class="filter-input" placeholder="Desde">
+                                <input type="date" id="dateToFilter" class="filter-input" placeholder="Hasta">
+                                <button id="clearFiltersBtn" class="btn-secondary">Limpiar filtros</button>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="invoices-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>N° Factura</th>
+                                            <th>Emisor</th>
+                                            <th>NIF</th>
+                                            <th>Categoría</th>
+                                            <th>Descripción</th>
+                                            <th>Importe</th>
+                                            <th>IVA</th>
+                                            <th>Total</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="allInvoicesTable">
+                                        <tr class="loading-row">
+                                            <td colspan="10">
+                                                <div class="loading-spinner"></div>
+                                                <p>Cargando facturas...</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="stat-card">
-                        <div class="stat-icon stat-icon-purple">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" stroke-width="2" />
-                                <line x1="1" y1="10" x2="23" y2="10" stroke-width="2" />
-                            </svg>
+                        <!-- Vista Análisis -->
+                        <div id="analyticsView" class="content-view">
+                            <div class="page-header">
+                                <h2>Análisis Financiero</h2>
+                                <p class="page-subtitle">Estadísticas y tendencias</p>
+                            </div>
+                            <div class="analytics-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <line x1="12" y1="20" x2="12" y2="10" stroke-width="2" />
+                                    <line x1="18" y1="20" x2="18" y2="4" stroke-width="2" />
+                                    <line x1="6" y1="20" x2="6" y2="16" stroke-width="2" />
+                                </svg>
+                                <p>Gráficos y análisis en desarrollo</p>
+                            </div>
                         </div>
-                        <div class="stat-content">
-                            <p class="stat-label">IVA Total</p>
-                            <p class="stat-value" id="totalIVA">€0.00</p>
+
+                        <!-- Vista Configuración -->
+                        <div id="settingsView" class="content-view">
+                            <div class="page-header">
+                                <h2>Configuración</h2>
+                                <p class="page-subtitle">Preferencias del sistema</p>
+                            </div>
+                            <div class="settings-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="3" stroke-width="2" />
+                                    <path
+                                        d="M12 1v6m0 6v6m8.66-15l-3 5.2M9.34 12.8l-3 5.2m12.66 0l-3-5.2M9.34 6.8l-3-5.2"
+                                        stroke-width="2" />
+                                </svg>
+                                <p>Panel de configuración en desarrollo</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon stat-icon-orange">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                                <polyline points="12 6 12 12 16 14" stroke-width="2" />
-                            </svg>
-                        </div>
-                        <div class="stat-content">
-                            <p class="stat-label">Este Mes</p>
-                            <p class="stat-value" id="monthlyTotal">€0.00</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tabla de Facturas Recientes -->
-                <div class="table-container">
-                    <div class="table-header">
-                        <h3>Facturas Recientes</h3>
-                        <button id="viewAllBtn" class="btn-secondary">Ver todas</button>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="invoices-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>N° Factura</th>
-                                    <th>Emisor</th>
-                                    <th>Categoría</th>
-                                    <th>Importe</th>
-                                    <th>IVA</th>
-                                    <th>Total</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentInvoicesTable">
-                                <tr class="loading-row">
-                                    <td colspan="8">
-                                        <div class="loading-spinner"></div>
-                                        <p>Cargando facturas...</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vista Facturas -->
-            <div id="invoicesView" class="content-view">
-                <div class="page-header">
-                    <h2>Todas las Facturas</h2>
-                    <p class="page-subtitle">Gestión completa de facturas</p>
-                </div>
-
-                <div class="filters-bar">
-                    <select id="categoryFilter" class="filter-select">
-                        <option value="">Todas las categorías</option>
-                    </select>
-                    <select id="monthFilter" class="filter-select">
-                        <option value="">Todos los meses</option>
-                    </select>
-                    <input type="date" id="dateFromFilter" class="filter-input" placeholder="Desde">
-                    <input type="date" id="dateToFilter" class="filter-input" placeholder="Hasta">
-                    <button id="clearFiltersBtn" class="btn-secondary">Limpiar filtros</button>
-                </div>
-
-                <div class="table-wrapper">
-                    <table class="invoices-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>N° Factura</th>
-                                <th>Emisor</th>
-                                <th>NIF</th>
-                                <th>Categoría</th>
-                                <th>Descripción</th>
-                                <th>Importe</th>
-                                <th>IVA</th>
-                                <th>Total</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="allInvoicesTable">
-                            <tr class="loading-row">
-                                <td colspan="10">
-                                    <div class="loading-spinner"></div>
-                                    <p>Cargando facturas...</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Vista Análisis -->
-            <div id="analyticsView" class="content-view">
-                <div class="page-header">
-                    <h2>Análisis Financiero</h2>
-                    <p class="page-subtitle">Estadísticas y tendencias</p>
-                </div>
-                <div class="analytics-placeholder">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <line x1="12" y1="20" x2="12" y2="10" stroke-width="2" />
-                        <line x1="18" y1="20" x2="18" y2="4" stroke-width="2" />
-                        <line x1="6" y1="20" x2="6" y2="16" stroke-width="2" />
-                    </svg>
-                    <p>Gráficos y análisis en desarrollo</p>
-                </div>
-            </div>
-
-            <!-- Vista Configuración -->
-            <div id="settingsView" class="content-view">
-                <div class="page-header">
-                    <h2>Configuración</h2>
-                    <p class="page-subtitle">Preferencias del sistema</p>
-                </div>
-                <div class="settings-placeholder">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="12" cy="12" r="3" stroke-width="2" />
-                        <path d="M12 1v6m0 6v6m8.66-15l-3 5.2M9.34 12.8l-3 5.2m12.66 0l-3-5.2M9.34 6.8l-3-5.2"
-                            stroke-width="2" />
-                    </svg>
-                    <p>Panel de configuración en desarrollo</p>
-                </div>
-            </div>
         </main>
     </div>
 
