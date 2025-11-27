@@ -1,5 +1,5 @@
 ﻿const CONFIG = {
-    SPREADSHEET_ID: '1VqGwm7KBxWbULlNvmDPbkO8VdPqLTqVYx_5rGqLqLqQ',
+    SPREADSHEET_ID: '1FWyLfkbQGbE-19FwP060iVdtKa0MUDPUAT1OH_th_NE',
     GOOGLE_CLIENT_ID: 'tu-client-id.apps.googleusercontent.com',
     APP_NAME: 'FacturaControl - DEMO',
     VERSION: '1.0.0',
