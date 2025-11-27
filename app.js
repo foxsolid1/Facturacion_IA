@@ -5,14 +5,33 @@ let currentUser = null;
 let googleAuth = null;
 let lastDataHash = null; // Para detectar cambios en los datos
 
+// MODO DEMO: Cambiar a true para demo sin login (GitHub Pages)
+const DEMO_MODE = typeof CONFIG !== 'undefined' && CONFIG.IS_DEMO === true;
+
 // ===== INICIALIZACIÓN =====
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
 
 function initializeApp() {
-    // Cargar Google Sign-In API
-    loadGoogleSignIn();
+    if (DEMO_MODE) {
+        // Modo demo: Saltar login y cargar datos directamente
+        console.log('🎯 Modo DEMO activado - Sin autenticación requerida');
+
+        // Crear usuario demo
+        currentUser = {
+            id: 'demo-user',
+            name: 'Usuario Demo',
+            email: 'demo@facturacion.com',
+            picture: 'https://ui-avatars.com/api/?name=Demo+User&background=6366f1&color=fff'
+        };
+
+        // Mostrar dashboard directamente
+        showDashboard();
+    } else {
+        // Modo normal: Cargar Google Sign-In API
+        loadGoogleSignIn();
+    }
 
     // Event Listeners
     setupEventListeners();
@@ -87,6 +106,14 @@ function showDashboard() {
     // Ocultar login, mostrar dashboard
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboardScreen').style.display = 'flex';
+
+    // Mostrar banner de demo si está en modo demo
+    if (DEMO_MODE) {
+        const demoBanner = document.getElementById('demoBanner');
+        if (demoBanner) {
+            demoBanner.style.display = 'block';
+        }
+    }
 
     // Actualizar información del usuario
     updateUserProfile();
