@@ -150,6 +150,24 @@ async function loadInvoicesData(isRefresh = false) {
     try {
         showLoading(true);
 
+        // MODO DEMO: Generar datos falsos para evitar errores de API sin login
+        if (DEMO_MODE) {
+            console.log('Modo Demo: Generando datos simulados...');
+            // Simular retardo de red para realismo
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            invoicesData = generateDemoData();
+            filteredData = [...invoicesData];
+
+            updateDashboard();
+            updateInvoicesTables();
+            populateFilters();
+
+            showLoading(false);
+            if (isRefresh) showNotification('Datos de demostración actualizados', 'success');
+            return;
+        }
+
         // Obtener datos del Google Sheets
         const url = getSheetURL();
         const response = await fetch(url);
@@ -196,9 +214,56 @@ async function loadInvoicesData(isRefresh = false) {
         showLoading(false);
     } catch (error) {
         console.error('Error al cargar datos:', error);
+        // En modo demo, si falla la carga real, hacemos fallback a datos demo
+        if (DEMO_MODE) {
+            console.warn('Fallo carga real en demo, usando datos simulados');
+            invoicesData = generateDemoData();
+            filteredData = [...invoicesData];
+            updateDashboard();
+            updateInvoicesTables();
+            populateFilters();
+            showLoading(false);
+            return;
+        }
         showError('No se pudieron cargar los datos de las facturas. Por favor, verifica la configuración.');
         showLoading(false);
     }
+}
+
+function generateDemoData() {
+    const categories = ['Alimentación', 'Transporte', 'Servicios', 'Oficina', 'Software', 'Viajes', 'Marketing'];
+    const issuers = ['Mercadona', 'Uber', 'Iberdrola', 'Amazon AWS', 'Microsoft', 'Renfe', 'Restaurante El Paso', 'Google Cloud', 'Apple Store'];
+    const data = [];
+
+    for (let i = 0; i < 35; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - Math.floor(Math.random() * 60)); // Últimos 60 días
+
+        const amount = Math.floor(Math.random() * 4500) + 150;
+        const iva = amount * 0.16; // IVA 16% México
+
+        data.push({
+            fecha: date.toISOString().split('T')[0],
+            categoria: categories[Math.floor(Math.random() * categories.length)],
+            numeroFactura: `F-${2024000 + i}`,
+            emisor: issuers[Math.floor(Math.random() * issuers.length)],
+            nif: `B${Math.floor(Math.random() * 100000000)}`,
+            direccion: 'Av. Reforma 123',
+            localidad: 'Ciudad de México',
+            codigoPostal: '06600',
+            provincia: 'CDMX',
+            telefono: '55 1234 5678',
+            descripcion: 'Servicios profesionales y suministros de oficina',
+            importe: amount,
+            iva: iva,
+            total: amount + iva,
+            moneda: 'MXN',
+            notas: 'Factura generada automáticamente para demostración',
+            url: '#'
+        });
+    }
+
+    return data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 }
 
 function parseSheetData(json) {
