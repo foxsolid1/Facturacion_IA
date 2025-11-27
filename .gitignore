@@ -1,5 +1,5 @@
 # Archivos de configuración sensibles
-config.js
+# config.js  # Permitido para GitHub Pages demo
 
 # Dependencias
 node_modules/
